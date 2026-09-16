@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import PaymentPage from "./pages/PaymentPage";
 import Profile from "./pages/Profile";
 import DietPlan from "./pages/DietPlan";
+import AdminLogin from "./pages/Admin/AdminLogin";
 
 function App() {
   useEffect(() => {
@@ -32,6 +33,8 @@ function App() {
           <Route path="/" element={<Landing />} />
 
           <Route path="/auth" element={<AuthPage />} />
+
+          <Route path="/admin/login" element={<AdminLogin/>}/>
 
           <Route
             path="/dashboard"
