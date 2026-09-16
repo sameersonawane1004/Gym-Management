@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+//user model
+model User{
+  id   Int   @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  role  String @default("USER")
+  createdAt DateTime @default(now())
+
+  memberships Membership[] 
+  payments Payment[]
+  dietPlans DietPlan []
+}
+
+//plan model
+model MembershipPlan{
+  id    Int   @id @default(autoincrement())
+  name String
+  description String
+  price Decimal @db.Decimal(10,2)
+  durationInMonths Int
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  memberships Membership[]
+
+}
+
+//membership model
+model Membership{
+  id Int @id @default(autoincrement())
+  userId Int
+  planId Int
+  startDate DateTime
+  endDate DateTime
+  status String @default("ACTIVE")
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId],references: [id])
+  plan MembershipPlan @relation(fields: [planId],references: [id])
+  payments Payment[]
+}
+
+//payment model
+model Payment{
+  id Int @id @default(autoincrement())
+  userId Int
+  membershipId Int?
+  amount Decimal @db.Decimal(10,2)
+  gatewayId String @unique
+  status   String @default("PENDING")
+  paymentDate  DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  user User  @relation(fields: [userId],references: [id])
+  membership Membership? @relation(fields: [membershipId],references: [id])
+}
+
+//AI Diet Plan model
+model DietPlan{
+  id Int @id @default(autoincrement())
+  userId Int 
+  goal String
+  inputs String @db.Text
+  planContent String @db.Text
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId],references: [id])
+}
