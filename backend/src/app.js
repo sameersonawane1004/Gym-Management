@@ -7,6 +7,7 @@ const membershipPlanRoutes=require("./routes/membershipPlanRoutes");
 const membershipRoutes=require("./routes/membershipRoutes");
 const paymentRoutes=require("./routes/paymentRoutes");
 const dietPlanRoutes = require("./routes/dietPlanRoutes");
+const adminRoutes=require("./routes/adminRoutes/adminRoutes");
 
 
 const app=express();
@@ -27,6 +28,10 @@ app.use("/api/membership-plans",membershipPlanRoutes);
 app.use("/api/memberships",membershipRoutes);
 app.use("/api/payments",paymentRoutes)
 app.use("/api/diet-plans",dietPlanRoutes);
+
+
+
+app.use("/api/admin",adminRoutes);
 
 app.use(errorMiddleware);
 
