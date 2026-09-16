@@ -11,6 +11,7 @@ import PaymentPage from "./pages/PaymentPage";
 import Profile from "./pages/Profile";
 import DietPlan from "./pages/DietPlan";
 import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 function App() {
   useEffect(() => {
@@ -34,7 +35,7 @@ function App() {
 
           <Route path="/auth" element={<AuthPage />} />
 
-          <Route path="/admin/login" element={<AdminLogin/>}/>
+          <Route path="/admin/login" element={<AdminLogin />} />
 
           <Route
             path="/dashboard"
@@ -86,6 +87,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <DietPlan />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />
