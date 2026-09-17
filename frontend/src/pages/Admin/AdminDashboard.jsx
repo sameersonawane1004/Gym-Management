@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import { useEffect,useState } from "react";
+import { toast } from 'react-hot-toast';
+import { getAdminDashboardStats } from "../../services/admin/adminService";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -10,28 +13,58 @@ function AdminDashboard() {
     navigate("/");
   };
 
-  const stats = [
+  const [stats, setStats] = useState({
+  totalMembers: 0,
+  totalMemberships: 0,
+  totalPlans: 0,
+  totalPayments: 0,
+});
+
+const [loading, setLoading] = useState(true);
+
+  
+
+  useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const response = await getAdminDashboardStats();
+
+      if (response.success) {
+        setStats(response.data);
+      }
+    } catch (error) {
+      console.error("Dashboard stats error:", error);
+      toast.error(error.message || "Failed to load dashboard statistics");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchStats();
+}, []);
+
+const statCards = [
     {
       title: "Total Members",
-      value: "0",
+      value: stats.totalMembers,
       icon: "◉",
       description: "Registered users",
     },
     {
       title: "Total Memberships",
-      value: "0",
+      value: stats.totalMemberships,
       icon: "▣",
       description: "Active memberships",
     },
     {
       title: "Total Plans",
-      value: "0",
+      value: stats.totalPlans,
       icon: "◇",
       description: "Available plans",
     },
     {
       title: "Total Payments",
-      value: "0",
+      value: stats.totalPayments,
       icon: "₹",
       description: "Payment records",
     },
@@ -268,7 +301,7 @@ function AdminDashboard() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
 
-              {stats.map((stat) => (
+              {statCards.map((stat) => (
 
                 <div
                   key={stat.title}
@@ -288,7 +321,7 @@ function AdminDashboard() {
                   </div>
 
                   <p className="text-3xl font-bold text-slate-900 mt-5">
-                    {stat.value}
+                    {loading ? "...": stat.value}
                   </p>
 
                   <p className="text-sm font-semibold text-slate-700 mt-1">
