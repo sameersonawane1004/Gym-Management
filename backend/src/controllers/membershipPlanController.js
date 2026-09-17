@@ -1,5 +1,5 @@
  const membershipPlanService=require("../services/membershipPlanService");
-
+//user side -active plan
  const getAllMembershipPlans=async(req,res,next)=>{
     try{
         const plans=await membershipPlanService.getMemberShipPlans();
@@ -14,6 +14,21 @@
     }
  };
 
+ // Admin side - all plans
+const getAllAdminMembershipPlans = async (req, res, next) => {
+    try {
+        const plans = await membershipPlanService.getAllMembershipPlans();
+
+        res.status(200).json({
+            success: true,
+            message: "All membership plans fetched successfully",
+            data: plans
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+//create plan
  const createMembershipPlan=async(req,res,next)=>{
     try{
         const{
@@ -35,6 +50,7 @@
     }
  };
 
+ //update plan
  const updateMembershipPlan=async(req,res,next)=>{
     try{
         const {id}=req.params;
@@ -66,8 +82,30 @@
     }
  };
 
+ // Delete plan
+const deleteMembershipPlan = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const plan = await membershipPlanService.deleteMembershipPlan(
+            Number(id)
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Membership plan deleted successfully",
+            data: plan
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
  module.exports={
     getAllMembershipPlans,
+    getAllAdminMembershipPlans,
     createMembershipPlan,
-    updateMembershipPlan
+    updateMembershipPlan,
+    deleteMembershipPlan,
  };
