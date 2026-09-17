@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import DietPlan from "./pages/DietPlan";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminMembers from "./pages/Admin/AdminMembers";
 
 function App() {
   useEffect(() => {
@@ -96,6 +97,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/members"
+            element={
+              <ProtectedRoute>
+                <AdminMembers/>
               </ProtectedRoute>
             }
           />
