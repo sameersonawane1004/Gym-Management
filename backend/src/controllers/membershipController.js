@@ -43,7 +43,21 @@ const getMyMembership=async(req,res,next)=>{
     }
 };
 
+const getAllMemberships = async(req,res,next)=>{
+    try{
+        const memberships=await membershipService.getAllMemberships();
+        res.status(200).json({
+            success:true,
+            message:"Memberships fetched successfully",
+            data:memberships
+        });
+    }catch(error){
+        next(error);
+    }
+};
+
 module.exports={
     addMembership,
-    getMyMembership
+    getMyMembership,
+    getAllMemberships
 }

@@ -60,7 +60,34 @@ const getMyMembership=async(userId)=>{
     });
     return membership;
 }
+
+const getAllMemberships=async()=>{
+    const memberships=await prisma.membership.findMany({
+        include:{
+            user:{
+                select:{
+                    id:true,
+                    name:true,
+                    email:true
+                }
+            },
+            plan:{
+                select:{
+                    id:true,
+                    name:true,
+                    price:true,
+                    durationInMonths:true
+                }
+            }
+        },
+        orderBy:{
+            createdAt:"desc"
+        }
+    });
+    return memberships;
+}
 module.exports={
     addMembership,
-    getMyMembership
+    getMyMembership,
+    getAllMemberships,
 }

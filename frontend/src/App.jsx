@@ -14,6 +14,7 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminMembers from "./pages/Admin/AdminMembers";
 import AdminPlans from "./pages/Admin/AdminPlans";
+import AdminMemberships from "./pages/Admin/AdminMemberships";
 
 function App() {
   useEffect(() => {
@@ -116,6 +117,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminPlans/>
+            </ProtectedRoute>
+          }
+          />
+
+          <Route
+          path="/admin/memberships"
+          element={
+            <ProtectedRoute>
+              <AdminMemberships/>
             </ProtectedRoute>
           }
           />
