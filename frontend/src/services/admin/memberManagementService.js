@@ -1,10 +1,11 @@
 import axios from "axios";
+import { getToken } from "../../utils/token";
 
 const API_URL="http://localhost:5000/api/admin/members";
 
 export const getAllMembers=async()=>{
     try{
-        const token=localStorage.getItem("token");
+        const token=getToken();
 
         const response=await axios.get(API_URL,{
             headers:{
@@ -26,7 +27,7 @@ export const getAllMembers=async()=>{
 
 export const getMemberById=async(memberId)=>{
     try{
-        const token=localStorage.getItem("token");
+        const token=getToken();
 
         const response=await axios.get(`${API_URL}/${memberId}`,{
             headers:{
@@ -47,7 +48,7 @@ export const getMemberById=async(memberId)=>{
 
 export const deleteMember=async(memberId)=>{
     try{
-        const token=localStorage.getItem("token");
+        const token=getToken();
 
         const response=await axios.delete(`${API_URL}/${memberId}`,{
             headers:{

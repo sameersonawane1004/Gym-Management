@@ -1,10 +1,11 @@
 import axios from "axios";
+import { getToken } from "../../utils/token";
 
 const API_URL ="http://localhost:5000/api/membership-plans";
 
 export const getAllAdminMembershipPlans =async()=>{
     try{
-        const token=localStorage.getItem("token");
+        const token=getToken();
         const response=await axios.get(`${API_URL}/admin`,{
             headers:{
                 Authorization: `Bearer ${token}`
@@ -25,7 +26,7 @@ export const getAllAdminMembershipPlans =async()=>{
 //create membership plan
 export const createMembershipPlan=async(planData)=>{
     try{
-        const token =localStorage.getItem("token");
+        const token =getToken();
         const response=await axios.post(
             `${API_URL}/create`,
             planData,
@@ -51,7 +52,7 @@ export const createMembershipPlan=async(planData)=>{
 // Update membership plan
 export const updateMembershipPlan = async (id, planData) => {
     try {
-        const token = localStorage.getItem("token");
+        const token = getToken();
 
         const response = await axios.put(
             `${API_URL}/update/${id}`,
@@ -76,7 +77,7 @@ export const updateMembershipPlan = async (id, planData) => {
 // Delete membership plan
 export const deleteMembershipPlan = async (id) => {
     try {
-        const token = localStorage.getItem("token");
+        const token = getToken();
 
         const response = await axios.delete(
             `${API_URL}/delete/${id}`,

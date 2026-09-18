@@ -1,9 +1,10 @@
 import axios  from "axios";
+import { getToken } from "../utils/token";
 const API_URL="http://localhost:5000/api/memberships";
 
 export const getMyMembership=async ()=>{
     try{
-        const token =localStorage.getItem("token");
+        const token =getToken();
 
         const response=await axios.get(
             `${API_URL}/my-memberships`,
@@ -24,7 +25,7 @@ export const getMyMembership=async ()=>{
 
 export const addMembership=async(planId)=>{
     try{
-        const token =localStorage.getItem("token");
+        const token =getToken();
 
         const response=await axios.post(
             `${API_URL}/add`,{

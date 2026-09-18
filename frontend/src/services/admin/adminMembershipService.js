@@ -1,10 +1,11 @@
 import axios from "axios";
+import { getToken } from "../../utils/token";
 
 const API_URL ="http://localhost:5000/api/memberships";
 
 export const getAllMemberships=async () =>{
     try{
-        const token=localStorage.getItem("token");
+        const token=getToken();
 
         const response=await axios.get(`${API_URL}/admin/all`,{
             headers:{

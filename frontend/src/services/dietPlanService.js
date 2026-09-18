@@ -1,10 +1,11 @@
 import axios from "axios";
+import { getToken } from "../utils/token";
 
 const API_URL = "http://localhost:5000/api/diet-plans";
 
 export const generateDietPlan = async (dietData) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     const response = await axios.post(
       `${API_URL}/generate`,
@@ -29,7 +30,7 @@ export const generateDietPlan = async (dietData) => {
 
 export const getMyDietPlans = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     const response = await axios.get(
       `${API_URL}/my-plans`,
@@ -53,7 +54,7 @@ export const getMyDietPlans = async () => {
 
 export const deleteDietPlan = async (dietPlanId) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
     const response = await axios.delete(
       `${API_URL}/${dietPlanId}`,
