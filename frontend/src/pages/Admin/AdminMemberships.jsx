@@ -1,240 +1,407 @@
-import AdminSidebar from './../../components/layout/Admin/AdminSidebar';
-import AdminDashboardHeader from './../../components/layout/Admin/AdminDashboardHeader';
 
-import { getAllMemberships } from '../../services/admin/adminMembershipService';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import AdminSidebar from "../../components/layout/Admin/AdminSidebar";
+import AdminDashboardHeader from "../../components/layout/Admin/AdminDashboardHeader";
 
-function AdminMemberships(){
-    const [memberships,setMemberships]=useState([]);
-    const [loading,setLoading]=useState(true);
+import { getAllMemberships } from "../../services/admin/adminMembershipService";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-    const fetchMemberships=async ()=>{
-        try{
+function AdminMemberships() {
+    const [memberships, setMemberships] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchMemberships = async () => {
+        try {
             setLoading(true);
-            const response=await getAllMemberships();
+
+            const response = await getAllMemberships();
 
             setMemberships(response.data || []);
-        }catch(error){
+        } catch (error) {
             toast.error(error.message);
-        }finally{
+        } finally {
             setLoading(false);
         }
     };
 
-    useEffect(()=>{
-        const timer=setTimeout(()=>{
+    useEffect(() => {
+        const timer = setTimeout(() => {
             fetchMemberships();
-        },0);
+        }, 0);
 
-        return ()=>clearTimeout(timer);
-    },[]);
+        return () => clearTimeout(timer);
+    }, []);
 
-    const formatDate =(date)=>{
-        return new Date(date).toLocaleDateString("en-IN",{
-            day:"2-digit",
-            month:"short",
-            year:"numeric"
+    const formatDate = (date) => {
+        return new Date(date).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
         });
     };
 
+    const activeMemberships = memberships.filter(
+        (membership) => membership.status === "ACTIVE"
+    ).length;
+
+    const inactiveMemberships = memberships.filter(
+        (membership) => membership.status !== "ACTIVE"
+    ).length;
+
     return (
-        <div className="min-h-screen bg-slate-50 flex">
+        <div className="h-screen bg-slate-50 flex overflow-hidden">
 
             <AdminSidebar />
 
-            <div className="flex-1 min-w-0">
+            <main className="flex-1 min-w-0 md:ml-[270px] h-screen overflow-y-auto">
 
-                <AdminDashboardHeader />
+                <AdminDashboardHeader
+                    title="Membership Management"
+                    description="View memberships purchased by gym members."
+                />
 
-                <main className="p-5 sm:p-7 lg:p-9">
+                <div className="p-5 sm:p-7 lg:p-9 page-enter">
 
-                    {/* Header */}
-                    <div className="mb-8">
+                    <div className="max-w-7xl mx-auto">
 
-                        <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">
-                            Membership Management
-                        </p>
+                        {/* Page Header */}
+                        <div className="mb-8">
 
-                        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
-                            Memberships
-                        </h1>
+                            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
 
-                        <p className="text-sm text-slate-500 mt-2">
-                            View memberships purchased by gym members.
-                        </p>
+                                <div>
 
-                    </div>
+                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-violet-700 text-xs font-semibold">
+                                        <span>▣</span>
+                                        Membership Management
+                                    </div>
 
-                    {/* Membership Table */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                                    <h1 className="mt-4 text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+                                        Memberships
+                                    </h1>
 
-                        <div className="px-6 py-5 border-b border-slate-100">
+                                    <p className="mt-2 text-slate-500 max-w-2xl">
+                                        Monitor memberships purchased by gym members,
+                                        including plans, dates, and current status.
+                                    </p>
 
-                            <h2 className="font-bold text-slate-900">
-                                All Memberships
-                            </h2>
+                                </div>
 
-                            <p className="text-sm text-slate-500 mt-1">
-                                {memberships.length} membership
-                                {memberships.length !== 1 ? "s" : ""} found
-                            </p>
+                                <button
+                                    onClick={fetchMemberships}
+                                    disabled={loading}
+                                    className="self-start lg:self-auto inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition disabled:opacity-50 shadow-sm"
+                                >
+                                    <span>↻</span>
+                                    {loading ? "Refreshing..." : "Refresh"}
+                                </button>
+
+                            </div>
 
                         </div>
 
-                        {loading ? (
+                        {/* Stats */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
 
-                            <div className="p-10 text-center text-slate-500">
-                                Loading memberships...
+                            {/* Total */}
+                            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
+
+                                <div className="flex items-center justify-between">
+
+                                    <div>
+                                        <p className="text-sm font-medium text-slate-500">
+                                            Total Memberships
+                                        </p>
+
+                                        <p className="mt-2 text-3xl font-bold text-slate-900">
+                                            {loading ? "..." : memberships.length}
+                                        </p>
+
+                                        <p className="mt-1 text-xs text-slate-400">
+                                            All membership records
+                                        </p>
+                                    </div>
+
+                                    <div className="w-11 h-11 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center text-lg">
+                                        ▣
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                        ) : memberships.length === 0 ? (
+                            {/* Active */}
+                            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
 
-                            <div className="p-10 text-center text-slate-500">
-                                No memberships found.
+                                <div className="flex items-center justify-between">
+
+                                    <div>
+                                        <p className="text-sm font-medium text-slate-500">
+                                            Active Memberships
+                                        </p>
+
+                                        <p className="mt-2 text-3xl font-bold text-slate-900">
+                                            {loading ? "..." : activeMemberships}
+                                        </p>
+
+                                        <p className="mt-1 text-xs text-emerald-600">
+                                            Currently active
+                                        </p>
+                                    </div>
+
+                                    <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                                        ✓
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                        ) : (
+                            {/* Inactive */}
+                            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm">
 
-                            <div className="overflow-x-auto">
+                                <div className="flex items-center justify-between">
 
-                                <table className="w-full min-w-[900px]">
+                                    <div>
+                                        <p className="text-sm font-medium text-slate-500">
+                                            Other Memberships
+                                        </p>
 
-                                    <thead className="bg-slate-50 border-b border-slate-200">
+                                        <p className="mt-2 text-3xl font-bold text-slate-900">
+                                            {loading ? "..." : inactiveMemberships}
+                                        </p>
 
-                                        <tr>
+                                        <p className="mt-1 text-xs text-slate-400">
+                                            Non-active records
+                                        </p>
+                                    </div>
 
-                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                                Member
-                                            </th>
+                                    <div className="w-11 h-11 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center text-lg">
+                                        •
+                                    </div>
 
-                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                                Plan
-                                            </th>
+                                </div>
 
-                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                                Price
-                                            </th>
+                            </div>
 
-                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                                Start Date
-                                            </th>
+                        </div>
 
-                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                                End Date
-                                            </th>
+                        {/* Membership Table */}
+                        <div className="bg-white border border-slate-200/80 rounded-3xl shadow-sm overflow-hidden">
 
-                                            <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                                Status
-                                            </th>
+                            <div className="px-5 sm:px-6 py-5 border-b border-slate-200/80">
 
-                                        </tr>
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
-                                    </thead>
+                                    <div>
+                                        <h2 className="text-lg font-bold text-slate-900">
+                                            All Memberships
+                                        </h2>
 
-                                    <tbody className="divide-y divide-slate-100">
+                                        <p className="mt-1 text-sm text-slate-500">
+                                            Membership records purchased by registered
+                                            gym members.
+                                        </p>
+                                    </div>
 
-                                        {memberships.map((membership) => (
+                                    <div className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-xs font-semibold self-start">
+                                        {loading
+                                            ? "Loading..."
+                                            : `${memberships.length} Membership${memberships.length !== 1 ? "s" : ""}`}
+                                    </div>
 
-                                            <tr
-                                                key={membership.id}
-                                                className="hover:bg-slate-50/70 transition"
-                                            >
+                                </div>
 
-                                                {/* Member */}
-                                                <td className="px-6 py-5">
+                            </div>
 
-                                                    <div className="flex items-center gap-3">
+                            {/* Loading */}
+                            {loading ? (
 
-                                                        <div className="w-10 h-10 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center font-bold">
-                                                            {membership.user?.name
-                                                                ?.charAt(0)
-                                                                .toUpperCase() || "U"}
-                                                        </div>
+                                <div className="p-6 space-y-3">
 
-                                                        <div>
+                                    {[1, 2, 3, 4, 5].map((item) => (
+                                        <div
+                                            key={item}
+                                            className="h-20 rounded-2xl skeleton"
+                                        />
+                                    ))}
 
-                                                            <p className="font-semibold text-slate-900">
-                                                                {membership.user?.name || "Unknown"}
-                                                            </p>
+                                </div>
 
-                                                            <p className="text-xs text-slate-500 mt-0.5">
-                                                                {membership.user?.email || "-"}
-                                                            </p>
+                            ) : memberships.length === 0 ? (
 
-                                                        </div>
+                                /* Empty State */
+                                <div className="px-6 py-16 text-center">
 
-                                                    </div>
+                                    <div className="mx-auto w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl">
+                                        ▣
+                                    </div>
 
-                                                </td>
+                                    <h3 className="mt-5 text-lg font-bold text-slate-900">
+                                        No memberships found
+                                    </h3>
 
-                                                {/* Plan */}
-                                                <td className="px-6 py-5">
+                                    <p className="mt-2 text-sm text-slate-500">
+                                        No members have purchased a membership yet.
+                                    </p>
 
-                                                    <p className="font-semibold text-slate-900">
-                                                        {membership.plan?.name || "-"}
-                                                    </p>
+                                </div>
 
-                                                    <p className="text-xs text-slate-500 mt-1">
-                                                        {membership.plan?.durationInMonths} month
-                                                        {membership.plan?.durationInMonths !== 1
-                                                            ? "s"
-                                                            : ""}
-                                                    </p>
+                            ) : (
 
-                                                </td>
+                                <div className="overflow-x-auto">
 
-                                                {/* Price */}
-                                                <td className="px-6 py-5">
+                                    <table className="w-full min-w-[1000px]">
 
-                                                    <p className="font-semibold text-slate-900">
-                                                        ₹{Number(membership.plan?.price || 0).toLocaleString("en-IN")}
-                                                    </p>
+                                        <thead>
 
-                                                </td>
+                                            <tr className="bg-slate-50/70 border-b border-slate-200">
 
-                                                {/* Start */}
-                                                <td className="px-6 py-5 text-sm text-slate-600">
-                                                    {formatDate(membership.startDate)}
-                                                </td>
+                                                <th className="px-6 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                    Member
+                                                </th>
 
-                                                {/* End */}
-                                                <td className="px-6 py-5 text-sm text-slate-600">
-                                                    {formatDate(membership.endDate)}
-                                                </td>
+                                                <th className="px-6 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                    Plan
+                                                </th>
 
-                                                {/* Status */}
-                                                <td className="px-6 py-5">
+                                                <th className="px-6 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                    Price
+                                                </th>
 
-                                                    <span
-                                                        className={`inline-flex px-3 py-1.5 rounded-full text-xs font-semibold ${
-                                                            membership.status === "ACTIVE"
-                                                                ? "bg-emerald-50 text-emerald-600"
-                                                                : "bg-slate-100 text-slate-500"
-                                                        }`}
-                                                    >
-                                                        {membership.status}
-                                                    </span>
+                                                <th className="px-6 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                    Start Date
+                                                </th>
 
-                                                </td>
+                                                <th className="px-6 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                    End Date
+                                                </th>
+
+                                                <th className="px-6 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                    Status
+                                                </th>
 
                                             </tr>
 
-                                        ))}
+                                        </thead>
 
-                                    </tbody>
+                                        <tbody className="divide-y divide-slate-100">
 
-                                </table>
+                                            {memberships.map((membership) => (
 
-                            </div>
+                                                <tr
+                                                    key={membership.id}
+                                                    className="hover:bg-slate-50/70 transition"
+                                                >
 
-                        )}
+                                                    {/* Member */}
+                                                    <td className="px-6 py-5">
+
+                                                        <div className="flex items-center gap-3">
+
+                                                            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-700 flex items-center justify-center font-bold">
+                                                                {membership.user?.name
+                                                                    ?.charAt(0)
+                                                                    .toUpperCase() || "U"}
+                                                            </div>
+
+                                                            <div>
+
+                                                                <p className="font-semibold text-slate-900">
+                                                                    {membership.user?.name || "Unknown"}
+                                                                </p>
+
+                                                                <p className="text-xs text-slate-400 mt-0.5">
+                                                                    {membership.user?.email || "-"}
+                                                                </p>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </td>
+
+                                                    {/* Plan */}
+                                                    <td className="px-6 py-5">
+
+                                                        <p className="font-semibold text-slate-900">
+                                                            {membership.plan?.name || "-"}
+                                                        </p>
+
+                                                        <p className="text-xs text-slate-400 mt-1">
+                                                            {membership.plan?.durationInMonths || "-"}{" "}
+                                                            {membership.plan?.durationInMonths === 1
+                                                                ? "Month"
+                                                                : "Months"}
+                                                        </p>
+
+                                                    </td>
+
+                                                    {/* Price */}
+                                                    <td className="px-6 py-5">
+
+                                                        <p className="font-semibold text-slate-900">
+                                                            ₹{Number(
+                                                                membership.plan?.price || 0
+                                                            ).toLocaleString("en-IN")}
+                                                        </p>
+
+                                                    </td>
+
+                                                    {/* Start */}
+                                                    <td className="px-6 py-5 text-sm text-slate-600">
+                                                        {formatDate(membership.startDate)}
+                                                    </td>
+
+                                                    {/* End */}
+                                                    <td className="px-6 py-5 text-sm text-slate-600">
+                                                        {formatDate(membership.endDate)}
+                                                    </td>
+
+                                                    {/* Status */}
+                                                    <td className="px-6 py-5">
+
+                                                        <span
+                                                            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold ${
+                                                                membership.status === "ACTIVE"
+                                                                    ? "bg-emerald-50 text-emerald-700"
+                                                                    : "bg-slate-100 text-slate-500"
+                                                            }`}
+                                                        >
+
+                                                            <span
+                                                                className={`w-1.5 h-1.5 rounded-full ${
+                                                                    membership.status === "ACTIVE"
+                                                                        ? "bg-emerald-500"
+                                                                        : "bg-slate-400"
+                                                                }`}
+                                                            />
+
+                                                            {membership.status}
+
+                                                        </span>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            ))}
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            )}
+
+                        </div>
 
                     </div>
 
-                </main>
+                </div>
 
-            </div>
+            </main>
 
         </div>
     );

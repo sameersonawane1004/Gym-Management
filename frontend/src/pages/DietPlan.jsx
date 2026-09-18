@@ -109,10 +109,10 @@ function DietPlan() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-slate-50 overflow-hidden">
       <Sidebar />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 md:ml-[270px] h-screen overflow-y-auto">
         <DashboardHeader
           title="AI Diet Plan"
           description="Create a personalized wellness-oriented nutrition plan"

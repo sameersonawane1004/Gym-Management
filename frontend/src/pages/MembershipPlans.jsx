@@ -74,10 +74,10 @@ const MembershipPlans = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 flex overflow-hidden">
       <Sidebar />
 
-      <main className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0 md:ml-[270px] h-screen overflow-y-auto">
         <DashboardHeader
           title="Membership Plans"
           description="Choose the right plan for your fitness journey"

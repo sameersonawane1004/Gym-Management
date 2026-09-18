@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { loginUser, registerUser } from "../services/authService";
 import toast from "react-hot-toast";
@@ -26,9 +25,7 @@ function AuthPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const [isLogin, setIsLogin] = useState(
-    searchParams.get("mode") === "login"
-  );
+  const [isLogin, setIsLogin] = useState(searchParams.get("mode") === "login");
 
   const [registerData, setRegisterData] = useState({
     name: "",
@@ -81,9 +78,7 @@ function AuthPage() {
 
     if (!registerData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerData.email)
-    ) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerData.email)) {
       newErrors.email = "Enter a valid email";
     }
 
@@ -156,6 +151,10 @@ function AuthPage() {
     try {
       const response = await loginUser(loginData);
 
+      if (response.data.role === "ADMIN") {
+        toast.error("Admin accounts cannot login from the user login page.");
+        return;
+      }
       login(response.data);
 
       toast.success(response.message || "Login successful!");
@@ -166,6 +165,7 @@ function AuthPage() {
       });
 
       setErrors({});
+
       navigate("/dashboard");
     } catch (error) {
       toast.error(error.message || "Login failed");
@@ -194,7 +194,6 @@ function AuthPage() {
 
       {/* Main card */}
       <div className="relative z-10 w-full max-w-6xl min-h-[680px] rounded-[28px] overflow-hidden border border-white/[0.08] bg-[#111118] shadow-2xl shadow-black/50 grid lg:grid-cols-[1.05fr_0.95fr]">
-        
         {/* ================= LEFT SIDE ================= */}
         <div
           className="relative hidden lg:flex flex-col justify-between p-10 xl:p-14 bg-cover bg-center transition-all duration-1000"
@@ -286,7 +285,6 @@ function AuthPage() {
         {/* ================= RIGHT SIDE ================= */}
         <div className="flex items-center justify-center bg-[#111118] p-6 sm:p-10 lg:p-12">
           <div className="w-full max-w-md">
-
             {/* Mobile logo */}
             <div className="lg:hidden mb-8">
               <button
@@ -324,10 +322,7 @@ function AuthPage() {
 
             {/* ================= REGISTER ================= */}
             {!isLogin && (
-              <form
-                onSubmit={handleRegisterSubmit}
-                className="mt-8 space-y-5"
-              >
+              <form onSubmit={handleRegisterSubmit} className="mt-8 space-y-5">
                 <AuthInput
                   label="Full Name"
                   type="text"
@@ -394,10 +389,7 @@ function AuthPage() {
 
             {/* ================= LOGIN ================= */}
             {isLogin && (
-              <form
-                onSubmit={handleLoginSubmit}
-                className="mt-8 space-y-5"
-              >
+              <form onSubmit={handleLoginSubmit} className="mt-8 space-y-5">
                 <AuthInput
                   label="Email Address"
                   type="email"
@@ -419,9 +411,7 @@ function AuthPage() {
                 />
 
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-600">
-                    Secure login
-                  </span>
+                  <span className="text-slate-600">Secure login</span>
 
                   <span className="flex items-center gap-1.5 text-emerald-400">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
@@ -476,15 +466,7 @@ function AuthPage() {
 
 /* ================= COMPONENTS ================= */
 
-function AuthInput({
-  label,
-  type,
-  name,
-  value,
-  onChange,
-  placeholder,
-  error,
-}) {
+function AuthInput({ label, type, name, value, onChange, placeholder, error }) {
   return (
     <div>
       <label className="block text-xs font-semibold text-slate-300 mb-2">
@@ -504,11 +486,7 @@ function AuthInput({
         }`}
       />
 
-      {error && (
-        <p className="mt-1.5 text-xs text-red-400">
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
     </div>
   );
 }
@@ -516,16 +494,11 @@ function AuthInput({
 function MiniFeature({ icon, text }) {
   return (
     <div className="rounded-xl border border-white/10 bg-black/20 backdrop-blur-sm px-3 py-3">
-      <div className="text-violet-300 text-sm mb-1">
-        {icon}
-      </div>
+      <div className="text-violet-300 text-sm mb-1">{icon}</div>
 
-      <p className="text-[10px] text-slate-300 font-medium">
-        {text}
-      </p>
+      <p className="text-[10px] text-slate-300 font-medium">{text}</p>
     </div>
   );
 }
 
 export default AuthPage;
-

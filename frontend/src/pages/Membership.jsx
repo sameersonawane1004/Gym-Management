@@ -41,10 +41,10 @@ const Membership = () => {
 }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 flex overflow-hidden">
       <Sidebar />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 md:ml-[270px] h-screen overflow-y-auto">
         <DashboardHeader
           title="My Membership"
           description="View your current membership and plan details"

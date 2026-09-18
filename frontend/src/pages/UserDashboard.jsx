@@ -82,7 +82,7 @@ function UserDashboard() {
   ];
 
   return (
-    <div className="min-h-screen flex bg-slate-50">
+    <div className="h-screen md:ml-[270px] flex bg-slate-50 overflow-y-auto">
 
       {/* Sidebar */}
       <Sidebar />

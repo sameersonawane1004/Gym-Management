@@ -14,7 +14,7 @@ function AdminSidebar() {
   };
 
   return (
-    <aside className="hidden md:flex w-[270px] min-h-screen flex-col bg-[#111118] text-white border-r border-white/[0.06]">
+    <aside className="hidden md:flex fixed left-0 top-0 z-40 w-[270px] h-screen overflow-y-auto flex-col bg-[#111118] text-white border-r border-white/[0.06]">
 
       {/* Logo */}
       <div className="px-6 pt-7 pb-6">

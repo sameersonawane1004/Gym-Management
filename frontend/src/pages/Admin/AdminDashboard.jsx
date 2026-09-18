@@ -66,13 +66,13 @@ const statCards = [
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="h-screen bg-slate-50 flex overflow-hidden">
 
       {/* Sidebar */}
        <AdminSidebar/>
 
       {/* Main content */}
-      <main className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0 md:ml-[270px] h-screen overflow-y-auto">
 
         {/* Header */}
          <AdminDashboardHeader/>

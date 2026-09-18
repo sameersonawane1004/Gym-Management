@@ -72,16 +72,17 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-slate-50">
+      <div className="flex min-h-screen bg-slate-50 overflow-hidden">
         <Sidebar />
 
-        <div className="flex-1 min-w-0">
+
+        <div className="flex-1 min-w-0 md:ml-[270px] h-screen overflow-y-auto">
           <DashboardHeader
             title="My Profile"
             description="Manage your personal information and account details."
           />
 
-          <main className="p-5 sm:p-7 lg:p-9">
+          <main className="p-5 sm:p-7 lg:p-9 ">
             <div className="max-w-5xl mx-auto space-y-6">
               <div className="h-48 rounded-3xl skeleton" />
 
@@ -97,10 +98,10 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-slate-50 overflow-hidden">
       <Sidebar />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 md:ml-[270px] h-screen overflow-y-auto">
         <DashboardHeader
           title="My Profile"
           description="Manage your personal information and account details."
